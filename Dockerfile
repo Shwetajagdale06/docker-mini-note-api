@@ -13,5 +13,9 @@ COPY app /app
 RUN mkdir -p /logs
 VOLUME ["/logs"]
 
+# Trigger build: Small test update for CI/CD verification
+LABEL ci-cd-test="true"
+
+
 EXPOSE 8000
 CMD ["uvicorn", "main:app", "--host", "0.0.0.0", "--port", "8000"]
