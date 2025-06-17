@@ -1,11 +1,14 @@
 from fastapi.responses import PlainTextResponse
 from fastapi import FastAPI, Request
+from fastapi.staticfiles import StaticFiles
 from pydantic import BaseModel
 import datetime
 from fastapi.middleware.cors import CORSMiddleware  # 👈 ADD THIS
 import os
 
 app = FastAPI()
+
+app.mount("/static", StaticFiles(directory="static"), name="static")
 
 
 app.add_middleware(
@@ -19,6 +22,15 @@ app.add_middleware(
 
 class Note(BaseModel):
     message: str
+
+
+@app.get("/", response_class=HTMLResponse)
+def root():
+    with open("static/index.html") as f:
+        return f.read()
+
+
+
 
 @app.post("/note")
 def write_note(note: Note):
@@ -48,3 +60,4 @@ def read_logs():
         with open(log_file, "r") as f:
             return f.read()
     return "No notes found yet."
+
