@@ -2,9 +2,20 @@ from fastapi.responses import PlainTextResponse
 from fastapi import FastAPI, Request
 from pydantic import BaseModel
 import datetime
+from fastapi.middleware.cors import CORSMiddleware  # 👈 ADD THIS
 import os
 
 app = FastAPI()
+
+
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=["*"],  # In production, replace "*" with your domain
+    allow_credentials=True,
+    allow_methods=["*"],
+    allow_headers=["*"],
+)
+
 
 class Note(BaseModel):
     message: str
