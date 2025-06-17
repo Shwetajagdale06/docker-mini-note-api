@@ -1,0 +1,14 @@
+version: '3.8'
+
+services:
+  note-api:
+    build: .
+    ports:
+      - "8000:8000"
+    volumes:
+      - note_logs:/logs
+    restart: unless-stopped
+
+volumes:
+  note_logs:
+
