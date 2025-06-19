@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Mini Note App</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      margin: 40px;
+    }
+    input, button {
+      padding: 10px;
+      font-size: 16px;
+      margin-top: 10px;
+    }
+    #responseMsg {
+      margin-top: 15px;
+      font-weight: bold;
+    }
+  </style>
+</head>
+<body>
+  <h2>Mini Note API (Frontend)</h2>
+  <input type="text" id="noteInput" placeholder="Enter your note..." size="50" />
+  <br />
+  <button onclick="submitNote()">Submit Note</button>
+  <p id="responseMsg"></p>
+
+  <script>
+    async function submitNote() {
+      const message = document.getElementById("noteInput").value.trim();
+      const responseMsg = document.getElementById("responseMsg");
+
+      if (!message) {
+        alert("Note cannot be empty!");
+        return;
+      }
+
+      try {
+        const res = await fetch("http://localhost:8000/note", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json"
+          },
+          body: JSON.stringify({ message })
+        });
+
+        const data = await res.json();
+
+        responseMsg.innerText = data.status === "saved" ? "✅ Note saved!" : "❌ Failed to save note.";
+        responseMsg.style.color = data.status === "saved" ? "green" : "red";
+      } catch (error) {
+        responseMsg.innerText = "❌ Error: Could not connect to backend.";
+        responseMsg.style.color = "red";
+      }
+    }
+  </script>
+</body>
+</html>
